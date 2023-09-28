@@ -24,6 +24,11 @@ public class ResultActivity extends AppCompatActivity {
         // Retrieve the BMI value from the intent sent by MainActivity
         double bmiValue = getIntent().getDoubleExtra("BMI_VALUE", 0);
 
+        // Retrieve the weight and height values from the intent
+        double weight = getIntent().getDoubleExtra("weight", 0);
+        double height = getIntent().getDoubleExtra("height", 0);
+
+
         // Display the BMI value in the TextView
         bmiResultTextView.setText(String.format("Your BMI is: %.2f", bmiValue));
 

@@ -54,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
                         //Navigate to second page
                         Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                        intent.putExtra("weight", weight);
-                        intent.putExtra("height", height);
+                        intent.putExtra("weight", weight); // Use the same key "weight"
+                        intent.putExtra("height", height); // Use the same key "height"
                         startActivity(intent);
+
                     } else {
                         // Display an error message if input is out of range
                         Toast.makeText(MainActivity.this, "Invalid input values", Toast.LENGTH_SHORT).show();
