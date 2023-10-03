@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,15 +49,15 @@ public class MainActivity extends AppCompatActivity {
                         double heightInMeters = height / 100.0;
                         double bmi = weight / (heightInMeters * heightInMeters);
 
-                        // Display the BMI in a Toast message
-                        String bmiMessage = String.format("Your BMI is %.2f", bmi);
-                        Toast.makeText(MainActivity.this, bmiMessage, Toast.LENGTH_SHORT).show();
 
-                        //Navigate to second page
+
+                        // Navigate to the ResultActivity and pass data
                         Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                        intent.putExtra("weight", weight); // Use the same key "weight"
-                        intent.putExtra("height", height); // Use the same key "height"
+                        intent.putExtra("weight", weight); // Use the key "weight"
+                        intent.putExtra("height", height); // Use the key "height"
+                        intent.putExtra("bmi", bmi); // Use the key "bmi" for the BMI value
                         startActivity(intent);
+
 
                     } else {
                         // Display an error message if input is out of range
