@@ -5,9 +5,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.FrameLayout.LayoutParams;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +20,7 @@ public class ResultActivity extends AppCompatActivity {
     private ProgressBar underweightProgressBar;
     private ProgressBar healthyProgressBar;
     private ProgressBar overweightProgressBar;
-    private View pointerIndicator; // Add this View
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,6 @@ public class ResultActivity extends AppCompatActivity {
         overweightProgressBar = findViewById(R.id.overweightProgressBar);
         bmiMessageTextView = findViewById(R.id.bmiMessageTextView);
         userBmiTextView = findViewById(R.id.userBmiTextView);
-        pointerIndicator = findViewById(R.id.pointerIndicator); // Initialize the pointer indicator
 
         // Retrieve the BMI value from the intent sent by MainActivity
         double bmiValue = getIntent().getDoubleExtra("bmi", 0); // Use the key "bmi"
@@ -54,16 +53,9 @@ public class ResultActivity extends AppCompatActivity {
         String bmiMessage = getBmiMessage(bmiValue);
         bmiMessageTextView.setText(bmiMessage);
 
-        // Set the user's BMI value on the pointer
+        // Set the user's BMI value on the TextView
         userBmiTextView.setText(String.format("Your BMI: %.2f", bmiValue));
 
-        // Calculate the position of the pointer indicator based on the user's BMI
-        int pointerPosition = calculatePointerPosition(underweightProgress, healthyProgress, overweightProgress, bmiValue);
-
-        // Set the layout parameters for the pointer indicator
-        LayoutParams params = (LayoutParams) pointerIndicator.getLayoutParams();
-        params.leftMargin = pointerPosition;
-        pointerIndicator.setLayoutParams(params);
 
         // Retrieve the weight and height values from the intent
         double weight = getIntent().getDoubleExtra("weight", 0);
@@ -82,6 +74,11 @@ public class ResultActivity extends AppCompatActivity {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create an intent to send the reset values back to MainActivity
+                Intent intent = new Intent();
+                intent.putExtra("resetWeight", 0.0); // Reset weight to 0.0
+                intent.putExtra("resetHeight", 0.0); // Reset height to 0.0
+                setResult(RESULT_OK, intent);
                 // Finish this activity and return to MainActivity
                 finish();
             }
@@ -94,25 +91,17 @@ public class ResultActivity extends AppCompatActivity {
         progressBar.getProgressDrawable().setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
+
     // Get the BMI message based on BMI value
     private String getBmiMessage(double bmi) {
         if (bmi < 18.5) {
-            return "You are considered Underweight.";
+            return "You are considered within the Underweight range.";
         } else if (bmi >= 18.5 && bmi <= 24.9) {
-            return "You are considered Healthy.";
+            return "You are considered within the Healthy range.";
         } else {
-            return "You are considered Overweight.";
+            return "You are considered in the Overweight range.";
         }
     }
 
-    // Calculate the position of the pointer indicator based on BMI value
-    private int calculatePointerPosition(int underweightProgress, int healthyProgress, int overweightProgress, double bmi) {
-        if (bmi < 18.5) {
-            return (int) (underweightProgress + ((bmi / 18.5) * (healthyProgress - underweightProgress)));
-        } else if (bmi >= 18.5 && bmi <= 24.9) {
-            return (int) (healthyProgress + (((bmi - 18.5) / (24.9 - 18.5)) * (overweightProgress - healthyProgress)));
-        } else {
-            return (int) (overweightProgress + (((bmi - 24.9) / (40 - 24.9)) * (100 - overweightProgress)));
-        }
-    }
+
 }

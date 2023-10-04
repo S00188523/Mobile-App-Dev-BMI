@@ -19,6 +19,13 @@ public class MainActivity extends AppCompatActivity {
     private double weight; // Declare weight as a member variable
     private double height; // Declare height as a member variable
 
+    // Define a constant for request code
+    private static final int RESET_REQUEST_CODE = 1;
+
+    // Declare TextViews for weight and height
+    private TextView weightTextView;
+    private TextView heightTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         heightEditText = findViewById(R.id.heightEditText);
         calculateButton = findViewById(R.id.calculateButton);
         resetButton = findViewById(R.id.resetButton);
+
 
         // Add click listener to the Calculate button
         calculateButton.setOnClickListener(new View.OnClickListener() {
@@ -49,15 +57,12 @@ public class MainActivity extends AppCompatActivity {
                         double heightInMeters = height / 100.0;
                         double bmi = weight / (heightInMeters * heightInMeters);
 
-
-
                         // Navigate to the ResultActivity and pass data
                         Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                         intent.putExtra("weight", weight); // Use the key "weight"
                         intent.putExtra("height", height); // Use the key "height"
                         intent.putExtra("bmi", bmi); // Use the key "bmi" for the BMI value
-                        startActivity(intent);
-
+                        startActivityForResult(intent, RESET_REQUEST_CODE); // Start with a request code
 
                     } else {
                         // Display an error message if input is out of range
@@ -77,7 +82,13 @@ public class MainActivity extends AppCompatActivity {
                 // Reset weightEditText and heightEditText
                 weightEditText.setText("");
                 heightEditText.setText("");
+
+                // Reset weightTextView and heightTextView
+                weightTextView.setText("Weight: ");
+                heightTextView.setText("Height: ");
             }
         });
     }
+
+
 }
